@@ -1,0 +1,111 @@
+# Dependencies
+node_modules/
+/**/node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+/**/coverage
+
+# Production
+/build
+/**/build
+/dist
+/**/dist
+/.next/
+/**/.next/
+/out/
+/**/.nuxt
+/**/.output
+
+# Nest.js
+/**/dist
+/**/*.tsbuildinfo
+
+# Next.js
+/.next/
+/out/
+/**/.next/
+/**/out/
+next-env.d.ts
+
+# React
+/**/build
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Lock files (optional - you may want to keep package-lock.json)
+# package-lock.json
+# yarn.lock
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Cache
+.cache
+.parcel-cache
+
+# Serverless
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Vercel
+.vercel

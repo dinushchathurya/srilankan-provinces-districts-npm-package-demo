@@ -1,0 +1,26 @@
+{
+  "name": "srilankan-provinces-demo",
+  "version": "1.0.0",
+  "description": "Demo for srilankan-provinces-districts with multiple frameworks",
+  "private": true,
+  "workspaces": [
+    "node-demo",
+    "react-demo",
+    "next-demo",
+    "nest-demo"
+  ],
+  "scripts": {
+    "node": "cd node-demo && npm start",
+    "react": "cd react-demo && npm start",
+    "next": "cd next-demo && npm run dev",
+    "nest": "cd nest-demo && npm run start:dev",
+    "install:all": "npm install && npm run install:node && npm run install:react && npm run install:next && npm run install:nest",
+    "install:node": "cd node-demo && npm install",
+    "install:react": "cd react-demo && npm install",
+    "install:next": "cd next-demo && npm install",
+    "install:nest": "cd nest-demo && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+} 

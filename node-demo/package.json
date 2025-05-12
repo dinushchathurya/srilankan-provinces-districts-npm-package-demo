@@ -1,0 +1,13 @@
+{
+  "name": "node-demo",
+  "version": "1.0.0",
+  "description": "Node.js demo for srilankan-provinces-districts",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "srilankan-provinces-districts": "2.0.0-rc.1"
+  }
+}
