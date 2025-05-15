@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "srilankan-provinces-districts": "2.0.0-rc.1"
+    "srilankan-provinces-districts": "2.0.0-rc.1",
+    "@dinush/srilankan-universities-faculties-degrees": "2.0.0-rc.7"
   }
 }
