@@ -10,12 +10,19 @@ function App() {
   const [selectedProvince, setSelectedProvince] = useState("");
   const [districts, setDistricts] = useState([]);
 
-  // Universities state
-  const [universities, setUniversities] = useState([]);
-  const [selectedUniversity, setSelectedUniversity] = useState("");
-  const [faculties, setFaculties] = useState([]);
-  const [selectedFaculty, setSelectedFaculty] = useState("");
-  const [degrees, setDegrees] = useState([]);
+  // Legacy Universities state
+  const [legacyUniversities, setLegacyUniversities] = useState([]);
+  const [selectedLegacyUniversity, setSelectedLegacyUniversity] = useState("");
+  const [legacyFaculties, setLegacyFaculties] = useState([]);
+  const [selectedLegacyFaculty, setSelectedLegacyFaculty] = useState("");
+  const [legacyDegrees, setLegacyDegrees] = useState([]);
+
+  // Modern Universities state
+  const [modernUniversities, setModernUniversities] = useState([]);
+  const [selectedModernUniversity, setSelectedModernUniversity] = useState("");
+  const [modernFaculties, setModernFaculties] = useState([]);
+  const [selectedModernFaculty, setSelectedModernFaculty] = useState("");
+  const [modernDegrees, setModernDegrees] = useState([]);
 
   // Check for modern APIs
   const hasModernProvincesAPI = typeof provincesData.getProvince === "function";
@@ -27,10 +34,18 @@ function App() {
     setProvinces(provincesData.getProvinces());
   }, []);
 
-  // Load universities data
+  // Load Legacy universities data
   useEffect(() => {
-    setUniversities(universitiesData.getUniversities());
+    setLegacyUniversities(universitiesData.getUniversities());
   }, []);
+
+  // Load Modern universities data
+  useEffect(() => {
+    if (hasModernUniversitiesAPI) {
+      const allUniversities = universitiesData.getAllUniversities();
+      setModernUniversities(allUniversities.map(u => u.name));
+    }
+  }, [hasModernUniversitiesAPI]);
 
   // Load districts when province changes
   useEffect(() => {
@@ -41,29 +56,56 @@ function App() {
     }
   }, [selectedProvince]);
 
-  // Load faculties when university changes
+  // Load Legacy faculties when university changes
   useEffect(() => {
-    if (selectedUniversity) {
-      setFaculties(universitiesData.getFaculties(selectedUniversity));
-      setSelectedFaculty("");
-      setDegrees([]);
+    if (selectedLegacyUniversity) {
+      setLegacyFaculties(universitiesData.getFaculties(selectedLegacyUniversity));
+      setSelectedLegacyFaculty("");
+      setLegacyDegrees([]);
     } else {
-      setFaculties([]);
-      setSelectedFaculty("");
-      setDegrees([]);
+      setLegacyFaculties([]);
+      setSelectedLegacyFaculty("");
+      setLegacyDegrees([]);
     }
-  }, [selectedUniversity]);
+  }, [selectedLegacyUniversity]);
 
-  // Load degrees when faculty changes
+  // Load Legacy degrees when faculty changes
   useEffect(() => {
-    if (selectedUniversity && selectedFaculty) {
-      setDegrees(
-        universitiesData.getDegrees(selectedUniversity, selectedFaculty)
+    if (selectedLegacyUniversity && selectedLegacyFaculty) {
+      setLegacyDegrees(
+        universitiesData.getDegrees(selectedLegacyUniversity, selectedLegacyFaculty)
       );
     } else {
-      setDegrees([]);
+      setLegacyDegrees([]);
     }
-  }, [selectedUniversity, selectedFaculty]);
+  }, [selectedLegacyUniversity, selectedLegacyFaculty]);
+
+  // Load Modern faculties when university changes
+  useEffect(() => {
+    if (selectedModernUniversity) {
+      const facultiesList = universitiesData.getFacultiesByUniversity(selectedModernUniversity);
+      setModernFaculties(facultiesList.map(f => f.name));
+      setSelectedModernFaculty("");
+      setModernDegrees([]);
+    } else {
+      setModernFaculties([]);
+      setSelectedModernFaculty("");
+      setModernDegrees([]);
+    }
+  }, [selectedModernUniversity]);
+
+  // Load Modern degrees when faculty changes
+  useEffect(() => {
+    if (selectedModernUniversity && selectedModernFaculty) {
+      const degreesList = universitiesData.getDegreesByFaculty(
+        selectedModernUniversity, 
+        selectedModernFaculty
+      );
+      setModernDegrees(degreesList.map(d => d.name));
+    } else {
+      setModernDegrees([]);
+    }
+  }, [selectedModernUniversity, selectedModernFaculty]);
 
   // Common styles
   const styles = {
@@ -82,6 +124,7 @@ function App() {
       padding: "10px 20px",
       cursor: "pointer",
       borderBottom: "2px solid transparent",
+      fontSize: "14px",
     },
     activeTab: {
       fontWeight: "bold",
@@ -125,11 +168,20 @@ function App() {
         <div
           style={{
             ...styles.tab,
-            ...(activeTab === "universities" ? styles.activeTab : {}),
+            ...(activeTab === "legacy-universities" ? styles.activeTab : {}),
           }}
-          onClick={() => setActiveTab("universities")}
+          onClick={() => setActiveTab("legacy-universities")}
         >
-          Universities & Degrees
+          Universities - Legacy API
+        </div>
+        <div
+          style={{
+            ...styles.tab,
+            ...(activeTab === "modern-universities" ? styles.activeTab : {}),
+          }}
+          onClick={() => setActiveTab("modern-universities")}
+        >
+          Universities - Modern API
         </div>
       </div>
 
@@ -188,29 +240,27 @@ function App() {
         </div>
       )}
 
-      {/* Universities Tab */}
-      {activeTab === "universities" && (
+      {/* Legacy Universities Tab */}
+      {activeTab === "legacy-universities" && (
         <div>
-          <p>
-            Using @dinush/srilankan-universities-faculties-degrees@2.0.0-rc.2
-          </p>
-          <p>Modern API available: {hasModernUniversitiesAPI ? "Yes" : "No"}</p>
+          <p>Using @dinush/srilankan-universities-faculties-degrees@2.0.0-rc.7</p>
+          <p><strong>Legacy API</strong> - using getUniversities(), getFaculties(), getDegrees()</p>
 
           <div style={{ marginBottom: "20px" }}>
             <label
-              htmlFor="university-select"
+              htmlFor="legacy-university-select"
               style={{ display: "block", marginBottom: "5px" }}
             >
               Select University:
             </label>
             <select
-              id="university-select"
-              value={selectedUniversity}
-              onChange={(e) => setSelectedUniversity(e.target.value)}
+              id="legacy-university-select"
+              value={selectedLegacyUniversity}
+              onChange={(e) => setSelectedLegacyUniversity(e.target.value)}
               style={styles.select}
             >
               <option value="">Select a university</option>
-              {universities.map((university) => (
+              {legacyUniversities.map((university) => (
                 <option key={university} value={university}>
                   {university}
                 </option>
@@ -218,22 +268,22 @@ function App() {
             </select>
           </div>
 
-          {selectedUniversity && faculties.length > 0 && (
+          {selectedLegacyUniversity && legacyFaculties.length > 0 && (
             <div style={{ marginBottom: "20px" }}>
               <label
-                htmlFor="faculty-select"
+                htmlFor="legacy-faculty-select"
                 style={{ display: "block", marginBottom: "5px" }}
               >
                 Select Faculty:
               </label>
               <select
-                id="faculty-select"
-                value={selectedFaculty}
-                onChange={(e) => setSelectedFaculty(e.target.value)}
+                id="legacy-faculty-select"
+                value={selectedLegacyFaculty}
+                onChange={(e) => setSelectedLegacyFaculty(e.target.value)}
                 style={styles.select}
               >
                 <option value="">Select a faculty</option>
-                {faculties.map((faculty) => (
+                {legacyFaculties.map((faculty) => (
                   <option key={faculty} value={faculty}>
                     {faculty}
                   </option>
@@ -242,13 +292,84 @@ function App() {
             </div>
           )}
 
-          {selectedUniversity && selectedFaculty && (
+          {selectedLegacyUniversity && selectedLegacyFaculty && (
             <div>
-              <h2>Degrees in {selectedFaculty}</h2>
-              {degrees.length > 0 ? (
+              <h2>Degrees in {selectedLegacyFaculty}</h2>
+              {legacyDegrees.length > 0 ? (
                 <ul style={styles.itemList}>
-                  {degrees.map((degree) => (
-                    <li key={degree} style={styles.item}>
+                  {legacyDegrees.map((degree, index) => (
+                    <li key={`legacy-${degree}-${index}`} style={styles.item}>
+                      {degree}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No degrees found for this faculty.</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Modern Universities Tab */}
+      {activeTab === "modern-universities" && (
+        <div>
+          <p>Using @dinush/srilankan-universities-faculties-degrees@2.0.0-rc.7</p>
+          <p><strong>Modern API</strong> - using getAllUniversities(), getFacultiesByUniversity(), getDegreesByFaculty()</p>
+
+          <div style={{ marginBottom: "20px" }}>
+            <label
+              htmlFor="modern-university-select"
+              style={{ display: "block", marginBottom: "5px" }}
+            >
+              Select University:
+            </label>
+            <select
+              id="modern-university-select"
+              value={selectedModernUniversity}
+              onChange={(e) => setSelectedModernUniversity(e.target.value)}
+              style={styles.select}
+            >
+              <option value="">Select a university</option>
+              {modernUniversities.map((university) => (
+                <option key={university} value={university}>
+                  {university}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {selectedModernUniversity && modernFaculties.length > 0 && (
+            <div style={{ marginBottom: "20px" }}>
+              <label
+                htmlFor="modern-faculty-select"
+                style={{ display: "block", marginBottom: "5px" }}
+              >
+                Select Faculty:
+              </label>
+              <select
+                id="modern-faculty-select"
+                value={selectedModernFaculty}
+                onChange={(e) => setSelectedModernFaculty(e.target.value)}
+                style={styles.select}
+              >
+                <option value="">Select a faculty</option>
+                {modernFaculties.map((faculty) => (
+                  <option key={faculty} value={faculty}>
+                    {faculty}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {selectedModernUniversity && selectedModernFaculty && (
+            <div>
+              <h2>Degrees in {selectedModernFaculty}</h2>
+              {modernDegrees.length > 0 ? (
+                <ul style={styles.itemList}>
+                  {modernDegrees.map((degree, index) => (
+                    <li key={`modern-${degree}-${index}`} style={styles.item}>
                       {degree}
                     </li>
                   ))}

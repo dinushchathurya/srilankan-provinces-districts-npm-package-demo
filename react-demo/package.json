@@ -7,7 +7,7 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "srilankan-provinces-districts": "2.0.0-rc.1",
-    "@dinush/srilankan-universities-faculties-degrees": "2.0.0-rc.7"
+    "@dinush/srilankan-universities-faculties-degrees": "2.0.0-rc.12"
   },
   "scripts": {
     "start": "react-scripts start",
